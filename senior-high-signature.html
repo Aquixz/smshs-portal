@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Senior High & Signature</title>
+  <link rel="stylesheet" href="senior-high.css">
+</head>
+
+<body>
+
+<div class="top-bar">
+  <div class="top-left">
+    <img src="sanma.png" alt="Logo">
+    <span>San Mateo Senior High School</span>
+  </div>
+  <div class="top-right">
+    <span>Hi, Student</span>
+    <a href="#">Sign out</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="status">
+    ✓ Application Form – Senior High & Signature
+  </div>
+
+  <div class="steps">
+    <div class="step done">Student Information</div>
+    <div class="line"></div>
+    <div class="step done">Address & Parents</div>
+    <div class="line"></div>
+    <div class="step active">Senior High & Signature</div>
+  </div>
+
+  <div class="form-card">
+
+    <h2 class="form-title">Senior High School Information</h2>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Semester</label>
+        <select id="shs_semester">
+          <option>1st Semester</option>
+          <option>2nd Semester</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>School Year</label>
+        <input type="text" id="shs_year" placeholder="2025 - 2026">
+      </div>
+
+      <div class="form-group">
+        <label>Track</label>
+        <input type="text" id="shs_track" placeholder="Academic / TVL / Sports / Arts">
+      </div>
+
+      <div class="form-group">
+        <label>Strand</label>
+        <input type="text" id="shs_strand" placeholder="STEM, ABM, HUMSS, ICT, etc.">
+      </div>
+
+    </div>
+
+    <h3 class="section-title">Parent / Guardian Certification</h3>
+
+    <div class="form-grid">
+
+      <div class="form-group full">
+        <label>Upload Signature (Image)</label>
+        <input type="file" id="parent_signature" accept="image/*">
+      </div>
+
+      <div class="form-group">
+        <label>Printed Name of Parent / Guardian</label>
+        <input type="text" id="parent_printed_name">
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="certification_date">
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <a href="address-parents.html" class="btn btn-back">Back</a>
+      <a href="dashboard.html" class="btn btn-next">Finalize Application</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const inputs = document.querySelectorAll("input:not([type='file']), select");
+
+  inputs.forEach(input => {
+    // Load saved value
+    const savedValue = localStorage.getItem(input.id);
+    if (savedValue) {
+      input.value = savedValue;
+    }
+
+    // Save on change
+    input.addEventListener("input", () => {
+      localStorage.setItem(input.id, input.value);
+    });
+  });
+</script>
+
+</body>
+</html>

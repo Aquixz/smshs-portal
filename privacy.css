@@ -1,0 +1,35 @@
+.privacy-box {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #374151;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.privacy-box h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #93c5fd;
+    font-weight: 800;
+}
+
+.privacy-box h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #bfdbfe;
+}
+
+.privacy-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.privacy-box li {
+    margin-bottom: 8px;
+}

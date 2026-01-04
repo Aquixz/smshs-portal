@@ -1,0 +1,213 @@
+/* Global */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to bottom right, #0f1d47, #12306b);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 1100px;
+    padding: 20px;
+}
+
+.card {
+    display: flex;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Left Panel */
+.left-panel {
+    width: 50%;
+    background: linear-gradient(to bottom right, #1e3a8a, #1e40af);
+    color: white;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-panel h1 {
+    font-size: 40px;
+    font-weight: 900;
+    margin-bottom: 20px;
+}
+
+.left-panel .description {
+    font-size: 18px;
+    line-height: 1.6;
+    border-left: 4px solid #60a5fa;
+    padding-left: 15px;
+    opacity: 0.9;
+}
+
+/* Right Panel */
+.right-panel {
+    width: 50%;
+    background: #111827;
+    color: white;
+    padding: 40px;
+}
+
+/* Header */
+.header-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #1f2937;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.header-box img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+input {
+    padding: 12px;
+    background: #1f2937;
+    color: white;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* 2-column layout */
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+.col {
+    flex: 1;
+}
+
+/* Code box */
+.code-box {
+    background: #1f2937;
+    border: 2px solid #475569;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    color: #facc15;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.input-code {
+    flex: 1;
+}
+
+/* Checkbox */
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.checkbox-row a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+/* Button */
+.create-btn {
+    background: #2563eb;
+    padding: 12px;
+    color: white;
+    font-weight: 800;
+    border-radius: 8px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.create-btn:hover {
+    background: #1e40af;
+}
+
+/* Footer text */
+.login-text {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.login-text a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+/* Verification section */
+.verify-section {
+    margin-top: 15px;
+}
+
+/* Hidden utility */
+.hidden {
+    display: none;
+}
+
+/* Send button */
+.send-btn {
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.send-btn:hover {
+    background: #1e40af;
+}
+
+.send-btn.disabled {
+    background: #475569;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Popup message */
+.popup {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #22c55e;
+    padding: 15px 20px;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.popup.show {
+    opacity: 1;
+}

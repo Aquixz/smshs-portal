@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Account</title>
+    <link rel="stylesheet" href="register.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init("mU6J8fQdBUySEuZ6X");
+       })();
+    </script>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="card">
+            <div class="left-panel">
+                <h1>Create Your Portal Account</h1>
+                <p class="description">
+                    Begin by creating your official account for the San Mateo Senior High School Online Enrollment System. 
+                    Provide your basic information and verify your identity to proceed.
+                </p>
+            </div>
+
+            <div class="right-panel">
+                <div class="header-box">
+                    <img src="sanma.png" onerror="this.src='https://placehold.co/40x40/3b82f6/ffffff?text=SHS'">
+                    <h2>Account Registration</h2>
+                </div>
+
+                <form id="registrationForm">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Last Name, First Name, Middle Name" required>
+
+                    <label>Phone Number</label>
+                    <input type="text" placeholder="09XXXXXXXXX" required>
+
+                    <label>Create Password</label>
+                    <input type="password" id="pass1" placeholder="••••••••" required>
+
+                    <label>Confirm Password</label>
+                    <input type="password" id="pass2" placeholder="••••••••" required>
+
+                    <label>Email Address</label>
+                    <div class="row">
+                        <input id="emailInput" type="email" class="col" placeholder="your@email.com" required>
+                        <button type="button" id="sendCodeBtn" class="send-btn col">Send Code</button>
+                    </div>
+
+                    <div id="verifySection" class="verify-section hidden">
+                        <label>Email Verification Code</label>
+                        <input type="text" id="otpInput" placeholder="Enter 6-digit code" maxlength="6">
+                    </div>
+
+                    <div id="popup" class="popup hidden">Verification code sent!</div>
+
+                    <div class="checkbox-row">
+                        <input type="checkbox" required>
+                        <span>I agree to the <a href="terms.html">Terms of Use</a> and <a href="privacy.html">Privacy Policy</a>.</span>
+                    </div>
+
+                    <button type="submit" class="create-btn">CREATE ACCOUNT</button>
+
+                    <p class="login-text">
+                        Already have an account? <a href="protov2.html">Sign in here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const sendBtn = document.getElementById("sendCodeBtn");
+    const popup = document.getElementById("popup");
+    const verifySection = document.getElementById("verifySection");
+    const registrationForm = document.getElementById("registrationForm");
+    
+    let generatedOTP = ""; 
+
+    sendBtn.addEventListener("click", () => {
+        const email = document.getElementById("emailInput").value;
+        if (!email || !email.includes("@")) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        sendBtn.textContent = "Sending...";
+        sendBtn.disabled = true;
+
+        const serviceID = "service_rv2mu2l";
+        const templateID = "template_o61frbn";
+        const templateParams = {
+            to_email: email,
+            verification_code: generatedOTP 
+        };
+
+        emailjs.send(serviceID, templateID, templateParams)
+            .then(() => {
+                showPopup();
+                verifySection.classList.remove("hidden");
+                startCountdown();
+                console.log("Debug: Code is " + generatedOTP);
+            }, (err) => {
+                alert("Failed: " + JSON.stringify(err));
+                sendBtn.textContent = "Send Code";
+                sendBtn.disabled = false;
+            });
+    });
+
+    function showPopup() {
+        popup.classList.add("show");
+        popup.classList.remove("hidden");
+        setTimeout(() => {
+            popup.classList.remove("show");
+            popup.classList.add("hidden");
+        }, 4000);
+    }
+
+    function startCountdown() {
+        let timeLeft = 60;
+        const interval = setInterval(() => {
+            timeLeft--;
+            sendBtn.textContent = `Resend (${timeLeft}s)`;
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                sendBtn.textContent = "Send Code";
+                sendBtn.disabled = false;
+            }
+        }, 1000);
+    }
+
+    registrationForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("emailInput").value;
+        const pass1 = document.getElementById("pass1").value;
+        const pass2 = document.getElementById("pass2").value;
+        const userOTP = document.getElementById("otpInput").value;
+        const fullName = document.getElementById("fullName").value;
+
+        if (!generatedOTP) {
+            alert("Please click 'Send Code' first.");
+            return;
+        }
+        if (userOTP !== generatedOTP) {
+            alert("Incorrect verification code.");
+            return;
+        }
+        if (pass1 !== pass2) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // --- THE FIX: SAVING THE DATA ---
+        localStorage.setItem("user_email", email.toLowerCase().trim());
+        localStorage.setItem("user_password", pass1);
+        localStorage.setItem("user_name", fullName);
+
+        alert("Account verified and saved! You can now log in.");
+        window.location.href = "protov2.html";
+    });
+</script>
+
+<style>
+    .hidden { display: none !important; }
+    .verify-section { margin-top: 15px; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    .popup.show { display: block !important; background: #16a34a; color: white; padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; font-size: 14px; }
+</style>
+</body>
+</html>

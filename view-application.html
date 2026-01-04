@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Applications</title>
+  <link rel="stylesheet" href="view-application.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Student Applications</h2>
+  
+    <table class="app-table">
+      <thead>
+        <tr>
+          <th>LRN</th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="applicationTableBody"></tbody>
+    </table>
+    <br>
+    <a href="registrar-dashboard.html" style="color: #9ca3af; text-decoration: none;">← Back to Dashboard</a>
+</div>
+
+<div class="modal" id="actionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index: 1000;">
+    <div class="modal-box" style="background:#111827; padding:30px; border-radius:15px; text-align:center; color:white; border:1px solid #374151; width: 380px;">
+        <h3>Review Application</h3>
+        <p id="modalStudentName" style="margin: 10px 0; color: #9ca3af; font-weight: bold;"></p>
+        
+        <button onclick="generateAdminPDF()" style="background:#0891b2; color:white; width:100%; padding:14px; border:none; border-radius:8px; cursor:pointer; margin-bottom: 20px; font-weight: bold; font-size: 14px;">
+            📄 View Full Student PDF
+        </button>
+
+        <div style="display:flex; gap:10px;">
+            <button onclick="updateStatus('Approved')" style="background:#16a34a; color:white; padding:12px; border:none; border-radius:8px; cursor:pointer; flex:1; font-weight: bold;">Accept</button>
+            <button onclick="updateStatus('Rejected')" style="background:#dc2626; color:white; padding:12px; border:none; border-radius:8px; cursor:pointer; flex:1; font-weight: bold;">Reject</button>
+        </div>
+        <button onclick="closeModal()" style="background:transparent; color:#9ca3af; border:none; margin-top:15px; cursor:pointer;">Close</button>
+    </div>
+</div>
+
+<div id="pdf-template" style="display: none; padding: 40px; color: black; background: white; font-family: Arial, sans-serif; font-size: 12px;">
+    <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 20px;">
+        <h2 style="margin:0;">SAN MATEO SENIOR HIGH SCHOOL</h2>
+        <p style="margin:5px 0;">Official Learner Registration Form (Registrar Copy)</p>
+        <p style="font-size: 11px;">School Year 2025 - 2026</p>
+    </div>
+
+    <h4 style="background: #eee; padding: 5px; border: 1px solid black; margin-bottom: 0;">I. LEARNER INFORMATION</h4>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr><td colspan="3" style="border: 1px solid black; padding: 8px;"><strong>Full Name:</strong> <span id="p_name"></span></td></tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>PSA No:</strong> <span id="p_psa"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>LRN:</strong> <span id="p_lrn"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Mother Tongue:</strong> <span id="p_mtongue"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Birthdate:</strong> <span id="p_bday"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Sex:</strong> <span id="p_sex"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Age:</strong> <span id="p_age"></span></td>
+        </tr>
+    </table>
+
+    <h4 style="background: #eee; padding: 5px; border: 1px solid black; margin-bottom: 0;">II. ADDRESS & CONTACT</h4>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr><td colspan="2" style="border: 1px solid black; padding: 8px;"><strong>Full Address:</strong> <span id="p_address"></span></td></tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Father:</strong> <span id="p_father"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Mother:</strong> <span id="p_mother"></span></td>
+        </tr>
+    </table>
+
+    <h4 style="background: #eee; padding: 5px; border: 1px solid black; margin-bottom: 0;">III. ENROLLMENT DETAILS</h4>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Track:</strong> <span id="p_track"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Strand:</strong> <span id="p_strand"></span></td>
+        </tr>
+    </table>
+    <p style="font-size: 10px;">Date Reviewed: <span id="p_date"></span></p>
+</div>
+
+<script>
+    function loadApplications() {
+        const tbody = document.getElementById('applicationTableBody');
+        const fname = localStorage.getItem('first_name') || '';
+        const lname = localStorage.getItem('last_name') || '';
+        const fullName = (fname + " " + lname).trim();
+        const lrn = localStorage.getItem('lrn') || '---';
+        const status = localStorage.getItem('application_status') || 'Pending';
+
+        if(!fullName) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No students applied yet.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = `
+            <tr>
+                <td>${lrn}</td>
+                <td>${fullName}</td>
+                <td><span class="status-pill ${status.toLowerCase()}">${status}</span></td>
+                <td><button class="btn-manage" onclick="openActionModal('${fullName}')">Manage</button></td>
+            </tr>`;
+    }
+
+    function openActionModal(name) {
+        document.getElementById('modalStudentName').innerText = name;
+        document.getElementById('actionModal').style.display = "flex";
+    }
+
+    function closeModal() { document.getElementById('actionModal').style.display = "none"; }
+
+    function generateAdminPDF() {
+        // Map all localStorage data to the template
+        document.getElementById('p_name').innerText = (localStorage.getItem('first_name') + " " + localStorage.getItem('last_name')).toUpperCase();
+        document.getElementById('p_psa').innerText = localStorage.getItem('psa_no') || 'N/A';
+        document.getElementById('p_lrn').innerText = localStorage.getItem('lrn') || 'N/A';
+        document.getElementById('p_mtongue').innerText = localStorage.getItem('mother_tongue') || 'N/A';
+        document.getElementById('p_bday').innerText = localStorage.getItem('birthdate') || 'N/A';
+        document.getElementById('p_sex').innerText = localStorage.getItem('sex') || 'N/A';
+        document.getElementById('p_age').innerText = localStorage.getItem('age') || 'N/A';
+        
+        const addr = `${localStorage.getItem('house_no')} ${localStorage.getItem('street_name')}, ${localStorage.getItem('barangay')}, ${localStorage.getItem('city')}`;
+        document.getElementById('p_address').innerText = addr;
+        
+        document.getElementById('p_father').innerText = localStorage.getItem('father_first') + " " + localStorage.getItem('father_last');
+        document.getElementById('p_mother').innerText = localStorage.getItem('mother_first') + " " + localStorage.getItem('mother_last');
+        
+        document.getElementById('p_track').innerText = localStorage.getItem('shs_track') || 'N/A';
+        document.getElementById('p_strand').innerText = localStorage.getItem('shs_strand') || 'N/A';
+        document.getElementById('p_date').innerText = new Date().toLocaleDateString();
+
+        const element = document.getElementById('pdf-template');
+        element.style.display = 'block';
+
+        const opt = {
+            margin: 0.5,
+            filename: 'SMSHS_Review_' + localStorage.getItem('last_name') + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            element.style.display = 'none';
+        });
+    }
+
+    function updateStatus(newStatus) {
+        localStorage.setItem('application_status', newStatus);
+        
+        // Sync with Dashboard Counters
+        if(newStatus === 'Approved') {
+            let count = parseInt(localStorage.getItem('admin_approved')) || 0;
+            localStorage.setItem('admin_approved', count + 1);
+        } else if(newStatus === 'Rejected') {
+            let count = parseInt(localStorage.getItem('admin_rejected')) || 0;
+            localStorage.setItem('admin_rejected', count + 1);
+        }
+        
+        alert("Student has been " + newStatus);
+        closeModal();
+        loadApplications();
+    }
+
+    window.onload = loadApplications;
+</script>
+
+<style>
+    body { font-family: sans-serif; background: #0f172a; color: white; }
+    .container { padding: 40px; max-width: 900px; margin: auto; }
+    .app-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1e293b; border-radius: 8px; overflow: hidden; }
+    .app-table th, .app-table td { padding: 15px; text-align: left; border-bottom: 1px solid #334155; }
+    .status-pill { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: capitalize; }
+    .status-pill.pending { background: #eab308; color: black; }
+    .status-pill.finalized { background: #06b6d4; color: white; }
+    .status-pill.approved { background: #22c55e; color: white; }
+    .status-pill.rejected { background: #ef4444; color: white; }
+    .btn-manage { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    .btn-manage:hover { background: #2563eb; }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Application Form</title>
+<link rel="stylesheet" href="application-form.css">
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="left">
+    <img src="sanma.png">
+    <span>San Mateo Senior High School</span>
+  </div>
+  <div class="right">
+    Hi, Student
+    <a href="#" class="logout">Sign out</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STATUS -->
+  <div class="status success">
+    ✔ Your application is in progress.
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="progress">
+    <div class="step active">Student Information</div>
+    <div class="line"></div>
+    <div class="step">Address & Parents</div>
+    <div class="line"></div>
+    <div class="step">Senior High & Signature</div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="form-card">
+    <h2>Learner Information</h2>
+
+    <div class="form-grid">
+
+      <div>
+        <label>PSA Birth Certificate No.</label>
+        <input id="psa_no" type="text">
+      </div>
+
+      <div>
+        <label>Learner Reference Number (LRN)</label>
+        <input id="lrn" type="text">
+      </div>
+
+      <div>
+        <label>Last Name</label>
+        <input id="last_name" type="text">
+      </div>
+
+      <div>
+        <label>First Name</label>
+        <input id="first_name" type="text">
+      </div>
+
+      <div>
+        <label>Middle Name</label>
+        <input id="middle_name" type="text">
+      </div>
+
+      <div>
+        <label>Extension Name</label>
+        <input id="extension_name" type="text">
+      </div>
+
+      <div>
+        <label>Birthdate</label>
+        <input id="birthdate" type="date">
+      </div>
+
+      <div>
+        <label>Age</label>
+        <input id="age" type="number">
+      </div>
+
+      <div>
+        <label>Sex</label>
+        <select id="sex">
+          <option value="">Select</option>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Place of Birth</label>
+        <input id="birth_place" type="text">
+      </div>
+
+      <div class="full">
+        <label>Mother Tongue</label>
+        <input id="mother_tongue" type="text">
+      </div>
+
+    </div>
+
+    <div class="actions space-between">
+      <a href="dashboard.html" class="back-btn">Back</a>
+      <a href="address-parents.html" class="next-btn">Next</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ✅ LOCAL STORAGE SCRIPT -->
+<script>
+  const inputs = document.querySelectorAll("input, select");
+
+  inputs.forEach(input => {
+    // Load saved value
+    const savedValue = localStorage.getItem(input.id);
+    if (savedValue) {
+      input.value = savedValue;
+    }
+
+    // Save on change
+    input.addEventListener("input", () => {
+      localStorage.setItem(input.id, input.value);
+    });
+  });
+</script>
+
+</body>
+</html>

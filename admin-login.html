@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrar Login</title>
+  <link rel="stylesheet" href="admin-login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="login-wrapper">
+    <div class="login-card">
+
+      <div class="logo">
+        <img src="sanma.png" alt="School Logo">
+      </div>
+
+      <h2>Registrar Login</h2>
+      <p class="subtitle">San Mateo Senior High School</p>
+
+      <!-- LOGIN FORM -->
+      <form id="adminLoginForm">
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" placeholder="email@school.edu" required>
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input type="password" placeholder="Enter password" required>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- TEMPORARY LOGIN SCRIPT -->
+  <script>
+    const form = document.getElementById("adminLoginForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault(); // stop page refresh
+
+      // TEMPORARY: allow any credentials
+      window.location.href = "registrar-dashboard.html";
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Address & Parents Information</title>
+<link rel="stylesheet" href="address-parents.css">
+</head>
+
+<body>
+
+<div class="top-bar">
+  <div class="left">
+    <img src="sanma.png">
+    <span>San Mateo Senior High School</span>
+  </div>
+  <div class="right">
+    Hi, Student
+    <a href="#" class="logout">Sign out</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="status success">
+    ✔ Your application is in progress.
+  </div>
+
+  <div class="progress">
+    <div class="step">Student Information</div>
+    <div class="line"></div>
+    <div class="step active">Address & Parents</div>
+    <div class="line"></div>
+    <div class="step">Senior High & Signature</div>
+  </div>
+
+  <div class="form-card">
+    <h2>Address & Parent / Guardian Information</h2>
+
+    <h3 class="section-title">Current Address</h3>
+    <div class="form-grid">
+      <div>
+        <label>House No.</label>
+        <input id="house_no" type="text">
+      </div>
+      <div>
+        <label>Street Name</label>
+        <input id="street_name" type="text">
+      </div>
+      <div>
+        <label>Barangay</label>
+        <input id="barangay" type="text">
+      </div>
+      <div>
+        <label>Municipality / City</label>
+        <input id="city" type="text">
+      </div>
+      <div>
+        <label>Province</label>
+        <input id="province" type="text">
+      </div>
+      <div>
+        <label>Zip Code</label>
+        <input id="zip_code" type="text">
+      </div>
+    </div>
+
+    <h3 class="section-title">Parent / Guardian Information</h3>
+    <div class="form-grid">
+      <div>
+        <label>Father's Last Name</label>
+        <input id="father_last" type="text">
+      </div>
+      <div>
+        <label>Father's First Name</label>
+        <input id="father_first" type="text">
+      </div>
+      <div>
+        <label>Father's Middle Name</label>
+        <input id="father_middle" type="text">
+      </div>
+      <div>
+        <label>Father's Contact Number</label>
+        <input id="father_contact" type="text">
+      </div>
+      <div>
+        <label>Mother's Maiden Last Name</label>
+        <input id="mother_last" type="text">
+      </div>
+      <div>
+        <label>Mother's First Name</label>
+        <input id="mother_first" type="text">
+      </div>
+      <div>
+        <label>Mother's Middle Name</label>
+        <input id="mother_middle" type="text">
+      </div>
+      <div>
+        <label>Mother's Contact Number</label>
+        <input id="mother_contact" type="text">
+      </div>
+      <div class="full">
+        <label>Legal Guardian (if applicable)</label>
+        <input id="guardian_name" type="text">
+      </div>
+    </div>
+
+    <div class="actions space-between">
+      <a href="student-info.html" class="back-btn">Back</a>
+      <a href="senior-high-signature.html" class="next-btn">Next</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const inputs = document.querySelectorAll("input, select");
+
+  inputs.forEach(input => {
+    // Load saved value using the ID
+    const savedValue = localStorage.getItem(input.id);
+    if (savedValue) {
+      input.value = savedValue;
+    }
+
+    // Save on change
+    input.addEventListener("input", () => {
+      localStorage.setItem(input.id, input.value);
+    });
+  });
+</script>
+
+</body>
+</html>

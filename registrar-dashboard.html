@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrar Dashboard</title>
+  <link rel="stylesheet" href="registrar-dashboard.css">
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="left">
+      <img src="sanma.png" alt="logo">
+      Registrar Dashboard
+    </div>
+    <a href="admin-login.html" class="logout">Sign out</a>
+  </div>
+
+  <div class="container">
+    <h2>Overview</h2>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Total Applications</h3>
+        <span id="stat_total">0</span>
+      </div>
+
+      <div class="card pending">
+        <h3>Pending Review</h3>
+        <span id="stat_pending">0</span>
+      </div>
+
+      <div class="card approved">
+        <h3>Approved</h3>
+        <span id="stat_approved">0</span>
+      </div>
+
+      <div class="card rejected">
+        <h3>Rejected</h3>
+        <span id="stat_rejected">0</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="view-application.html" class="primary-btn">View Applications</a>
+      <button class="secondary" onclick="resetStats()">Clear All Data</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. Function to refresh the numbers on the screen
+    function updateDashboardStats() {
+        const total = localStorage.getItem('admin_total') || 0;
+        const pending = localStorage.getItem('admin_pending') || 0;
+        const approved = localStorage.getItem('admin_approved') || 0;
+        const rejected = localStorage.getItem('admin_rejected') || 0;
+
+        document.getElementById('stat_total').innerText = total;
+        document.getElementById('stat_pending').innerText = pending;
+        document.getElementById('stat_approved').innerText = approved;
+        document.getElementById('stat_rejected').innerText = rejected;
+    }
+
+    // 2. Function to clear all data
+    function resetStats() {
+        if(confirm("Are you sure you want to reset all application counters to 0?")) {
+            localStorage.setItem('admin_total', 0);
+            localStorage.setItem('admin_pending', 0);
+            localStorage.setItem('admin_approved', 0);
+            localStorage.setItem('admin_rejected', 0);
+            updateDashboardStats();
+        }
+    }
+
+    // 3. Listen for changes made by the Student Dashboard
+    window.addEventListener('storage', (e) => {
+        const adminKeys = ['admin_total', 'admin_pending', 'admin_approved', 'admin_rejected'];
+        if (adminKeys.includes(e.key)) {
+            updateDashboardStats();
+        }
+    });
+
+    // Run immediately on page load
+    updateDashboardStats();
+  </script>
+
+</body>
+</html>

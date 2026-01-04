@@ -1,0 +1,27 @@
+.terms-box {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #374151;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.terms-box h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #93c5fd;
+    font-weight: 700;
+}
+
+.terms-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.terms-box li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}

@@ -1,0 +1,164 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to bottom right, #0f1d47, #12306b);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 1100px;
+    padding: 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Left Panel */
+.left-panel {
+    width: 60%;
+    background: linear-gradient(to bottom right, #1e3a8a, #1e40af);
+    color: white;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-panel h1 {
+    font-size: 42px;
+    font-weight: 900;
+    margin-bottom: 20px;
+}
+
+.description {
+    font-size: 18px;
+    line-height: 1.6;
+    border-left: 4px solid #60a5fa;
+    padding-left: 15px;
+    opacity: 0.9;
+}
+
+.accessibility-btn {
+    margin-top: auto;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    color: #e0e7ff;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+/* Right Panel */
+.right-panel {
+    width: 40%;
+    background: #111827;
+    color: white;
+    padding: 40px;
+}
+
+/* Header */
+.school-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #1f2937;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.school-header img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+input {
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #1f2937;
+    color: white;
+}
+
+.forgot {
+    font-size: 12px;
+    margin-top: -12px;
+    margin-bottom: 20px;
+    text-align: right;
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+/* Security Box */
+.security-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.code-display {
+    width: 40%;
+    padding: 15px;
+    background: #1f2937;
+    border: 2px solid #374151;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #facc15;
+}
+
+/* Buttons */
+.signin-btn {
+    background: #2563eb;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.signin-btn:hover {
+    background: #1e40af;
+}
+
+/* Footer text */
+.signup-text, .terms {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+.signup-text a,
+.terms a {
+    color: #60a5fa;
+    text-decoration: none;
+}

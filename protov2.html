@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Mateo Senior High School Login</title>
+    <link rel="stylesheet" href="login.css">
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // Initialized with your Public Key
+          emailjs.init("mU6J8fQdBUySEuZ6X");
+       })();
+    </script>
+</head>
+
+<body>
+<div class="main-container">
+    <div class="card">
+
+        <div class="left-panel">
+            <h1>Welcome Back!</h1>
+            <p class="description">
+                Please use this official online registration form to pre-register and submit all necessary preliminary details before the final enrollment period. Start your application now!
+            </p>
+
+            <button class="accessibility-btn">
+                ⚑ Accessibility Options & Support
+            </button>
+        </div>
+
+        <div class="right-panel">
+
+            <div class="school-header">
+                <img src="sanma.png" onerror="this.src='https://placehold.co/40x40/3b82f6/ffffff?text=SHS'">
+                <h2>San Mateo Senior High School</h2>
+            </div>
+
+            <form onsubmit="event.preventDefault(); login();">
+
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="you@email.com" required>
+
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+
+                <a href="#" class="forgot" onclick="forgotPassword()">Forgot your password?</a>
+
+                <label>Security Verification</label>
+                <div class="security-box" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <div id="captchaQuestion" class="code-display" style="background: #374151; padding: 10px; border-radius: 5px; color: white; min-width: 80px; text-align: center; font-weight: bold;">
+                        -- + --
+                    </div>
+                    <input type="number" id="captchaInput" placeholder="Answer" style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #374151; background: #1f2937; color: white;" required>
+                </div>
+
+                <button type="submit" class="signin-btn">SIGN IN</button>
+
+                <p class="signup-text">
+                    Don't have an account? <a href="register.html">Register here</a>
+                </p>
+
+                <p class="terms">
+                    By signing in, you agree to our
+                    <a href="#">Terms of Use</a> and
+                    <a href="#">Privacy Statement</a>.
+                </p>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let captchaAnswer;
+
+    function generateCaptcha() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        captchaAnswer = num1 + num2;
+        document.getElementById("captchaQuestion").innerText = `${num1} + ${num2} = ?`;
+    }
+
+    // --- UPDATED FORGOT PASSWORD LOGIC (Step 3) ---
+    function forgotPassword() {
+        const emailInput = document.getElementById("email").value.trim().toLowerCase();
+        const savedEmail = localStorage.getItem("user_email");
+        const forgotLink = document.querySelector(".forgot");
+
+        if (!emailInput) {
+            alert("Please type your email address in the field first.");
+            return;
+        }
+
+        if (emailInput !== savedEmail) {
+            alert("This email address is not registered in our system.");
+            return;
+        }
+
+        // Change UI to show it's working
+        const originalText = forgotLink.innerText;
+        forgotLink.innerText = "Sending reset link...";
+        forgotLink.style.pointerEvents = "none"; 
+
+        const serviceID = "service_rko0f3e";
+        const recoveryTemplateID = "template_t2ohcme";
+
+        const templateParams = {
+            to_email: savedEmail
+            // No longer sending user_password here for security
+        };
+
+        emailjs.send(serviceID, recoveryTemplateID, templateParams)
+            .then(() => {
+                alert("A password reset link has been sent to " + savedEmail + ". Please check your inbox.");
+            }, (err) => {
+                alert("Failed to send email. Error: " + JSON.stringify(err));
+            })
+            .finally(() => {
+                // Reset link appearance
+                forgotLink.innerText = originalText;
+                forgotLink.style.pointerEvents = "auto";
+            });
+    }
+
+    // --- LOGIN LOGIC ---
+    function login() {
+        const emailInput = document.getElementById("email").value.trim().toLowerCase();
+        const passwordInput = document.getElementById("password").value;
+        const userCaptcha = parseInt(document.getElementById("captchaInput").value);
+
+        if (userCaptcha !== captchaAnswer) {
+            alert("Security Verification failed. Please solve the math problem correctly.");
+            generateCaptcha();
+            document.getElementById("captchaInput").value = "";
+            return;
+        }
+
+        const savedEmail = localStorage.getItem("user_email");
+        const savedPassword = localStorage.getItem("user_password");
+
+        if (!savedEmail) {
+            alert("No account found. Please go to the Registration page first.");
+            return;
+        }
+
+        if (emailInput === savedEmail && passwordInput === savedPassword) {
+            alert("Login successful! Redirecting to your dashboard...");
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Invalid email or password. Please try again.");
+            generateCaptcha(); 
+        }
+    }
+
+    window.onload = generateCaptcha;
+</script>
+
+</body>
+</html>

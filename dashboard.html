@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="left">
+        <img src="sanma.png" alt="Logo">
+        <span>San Mateo Senior High School</span>
+    </div>
+    <div class="right">
+        <span class="user">Hi, Student</span>
+        <a href="login.html" class="logout" onclick="localStorage.clear()">Sign out</a>
+    </div>
+</header>
+
+<main class="container">
+    <div class="status success" id="statusBox">✔ Your application is in progress.</div>
+
+    <div class="progress">
+        <div class="step active">Form</div>
+        <div class="line"></div>
+        <div class="step" id="stepFinal">Finalized</div>
+        <div class="line"></div>
+        <div class="step" id="stepPDF">PDF Ready</div>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon blue">📝</div>
+            <div>
+                <h3>Application Form</h3>
+                <p>Fill up or review your application</p>
+                <a href="student-info.html" onclick="incrementPending()">Open Form</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="icon green">🔒</div>
+            <div>
+                <h3>Finalize Application</h3>
+                <p>Lock and submit your form</p>
+                <button onclick="openModal()">Finalize</button>
+            </div>
+        </div>
+
+        <div class="card disabled" id="pdfCard">
+            <div class="icon cyan">📄</div>
+            <div>
+                <h3>Download PDF</h3>
+                <p>Printable application copy</p>
+                <button onclick="generateRegistrationPDF()" id="downloadBtn" disabled style="background:#0891b2; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; opacity:0.5;">Download</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modal" id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+    <div class="modal-box" style="background:#111827; padding:30px; border-radius:15px; text-align:center; max-width:400px; border:1px solid #374151;">
+        <h2 style="color:white;">Finalize Application</h2>
+        <p style="color:#9ca3af; margin: 15px 0;">Once finalized, you can no longer edit your application. Are you sure?</p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+            <button onclick="closeModal()" style="background:#374151; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Cancel</button>
+            <button onclick="finalizeApp()" style="background:#16a34a; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Yes, Finalize</button>
+        </div>
+    </div>
+</div>
+
+<div id="registration-form-pdf" style="display: none; padding: 40px; color: black; background: white; font-family: Arial, sans-serif; font-size: 12px;">
+    <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 20px;">
+        <h2 style="margin:0;">SAN MATEO SENIOR HIGH SCHOOL</h2>
+        <p style="margin:5px 0;">Official Learner Registration Form</p>
+        <p style="font-size: 11px;">School Year 2025 - 2026</p>
+    </div>
+
+    <h4 style="background: #eee; padding: 5px; border: 1px solid black; margin-bottom: 0;">I. LEARNER INFORMATION</h4>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr><td colspan="3" style="border: 1px solid black; padding: 8px;"><strong>Full Name:</strong> <span id="p_name"></span></td></tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>PSA No:</strong> <span id="p_psa"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>LRN:</strong> <span id="p_lrn"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Mother Tongue:</strong> <span id="p_mtongue"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Birthdate:</strong> <span id="p_bday"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Sex:</strong> <span id="p_sex"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Age:</strong> <span id="p_age"></span></td>
+        </tr>
+        <tr><td colspan="3" style="border: 1px solid black; padding: 8px;"><strong>Place of Birth:</strong> <span id="p_bplace"></span></td></tr>
+    </table>
+
+    <h4 style="background: #eee; padding: 5px; border: 1px solid black; margin-bottom: 0;">II. ADDRESS & CONTACT</h4>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr><td colspan="2" style="border: 1px solid black; padding: 8px;"><strong>Full Address:</strong> <span id="p_address"></span></td></tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Father's Name & Contact:</strong> <br><span id="p_father"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Mother's Name & Contact:</strong> <br><span id="p_mother"></span></td>
+        </tr>
+        <tr><td colspan="2" style="border: 1px solid black; padding: 8px;"><strong>Legal Guardian:</strong> <span id="p_guardian"></span></td></tr>
+    </table>
+
+    <h4 style="background: #eee; padding: 5px; border: 1px solid black; margin-bottom: 0;">III. ENROLLMENT DETAILS</h4>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Track:</strong> <span id="p_track"></span></td>
+            <td style="border: 1px solid black; padding: 8px;"><strong>Strand:</strong> <span id="p_strand"></span></td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+        <div style="text-align: center; width: 40%;"><div style="border-bottom: 1px solid black; height: 30px;"></div><p>Student Signature</p></div>
+        <div style="text-align: center; width: 40%;"><div style="border-bottom: 1px solid black; height: 30px;"></div><p>Parent/Guardian Signature</p></div>
+    </div>
+    <p style="font-size: 10px; margin-top: 40px;">Date Generated: <span id="p_date"></span></p>
+</div>
+
+<script>
+    // --- ADMIN LINKING LOGIC ---
+    function incrementPending() {
+    if (!sessionStorage.getItem('alreadyCounted')) {
+        // Change the || 68 to || 0
+        let currentPending = parseInt(localStorage.getItem('admin_pending')) || 0;
+        let currentTotal = parseInt(localStorage.getItem('admin_total')) || 0;
+        
+        localStorage.setItem('admin_pending', currentPending + 1);
+        localStorage.setItem('admin_total', currentTotal + 1);
+        
+        sessionStorage.setItem('alreadyCounted', 'true');
+    }
+}
+
+    function openModal() { document.getElementById("modal").style.display = "flex"; }
+    function closeModal() { document.getElementById("modal").style.display = "none"; }
+
+    function finalizeApp() {
+    closeModal();
+    
+    // 1. Update the Student's Screen
+    document.getElementById("statusBox").textContent = "✔ Your application has been finalized. PDF is ready.";
+    document.getElementById("stepFinal").classList.add("active");
+    document.getElementById("stepPDF").classList.add("active");
+    document.getElementById("pdfCard").classList.remove("disabled");
+    
+    const btn = document.getElementById("downloadBtn");
+    btn.disabled = false;
+    btn.style.opacity = "1";
+
+    // 2. TELL THE ADMIN: Mark as Finalized
+    localStorage.setItem('application_status', 'Finalized');
+    
+    // 3. UPDATE THE COUNTERS
+    if (!sessionStorage.getItem('alreadySubscribed')) {
+        let currentPending = parseInt(localStorage.getItem('admin_pending')) || 0;
+        let currentApproved = parseInt(localStorage.getItem('admin_approved')) || 0;
+        
+        // Move from Pending to Approved in the Overview
+        if (currentPending > 0) {
+            localStorage.setItem('admin_pending', currentPending - 1);
+        }
+        localStorage.setItem('admin_approved', currentApproved + 1);
+        
+        sessionStorage.setItem('alreadySubscribed', 'true');
+    }
+}
+
+    function generateRegistrationPDF() {
+        const psa = localStorage.getItem('psa_no') || '---';
+        const lrn = localStorage.getItem('lrn') || '---';
+        const lname = localStorage.getItem('last_name') || '';
+        const fname = localStorage.getItem('first_name') || '';
+        const mname = localStorage.getItem('middle_name') || '';
+        const age = localStorage.getItem('age') || '---';
+        const bday = localStorage.getItem('birthdate') || '---';
+        const sex = localStorage.getItem('sex') || '---';
+        const mtongue = localStorage.getItem('mother_tongue') || '---';
+        const bplace = localStorage.getItem('birth_place') || '---';
+
+        const house = localStorage.getItem('house_no') || '';
+        const street = localStorage.getItem('street_name') || '';
+        const brgy = localStorage.getItem('barangay') || '';
+        const city = localStorage.getItem('city') || '';
+        const prov = localStorage.getItem('province') || '';
+        const zip = localStorage.getItem('zip_code') || '';
+        
+        const f_full = (localStorage.getItem('father_first') || '') + " " + (localStorage.getItem('father_last') || '') + " | " + (localStorage.getItem('father_contact') || 'No Contact');
+        const m_full = (localStorage.getItem('mother_first') || '') + " " + (localStorage.getItem('mother_last') || '') + " | " + (localStorage.getItem('mother_contact') || 'No Contact');
+        const legal_g = localStorage.getItem('guardian_name') || '---';
+
+        const track = localStorage.getItem('shs_track') || '---';
+        const strand = localStorage.getItem('shs_strand') || '---';
+
+        document.getElementById('p_psa').innerText = psa;
+        document.getElementById('p_lrn').innerText = lrn;
+        document.getElementById('p_name').innerText = (lname + ", " + fname + " " + mname).toUpperCase();
+        document.getElementById('p_mtongue').innerText = mtongue;
+        document.getElementById('p_bday').innerText = bday;
+        document.getElementById('p_sex').innerText = sex;
+        document.getElementById('p_age').innerText = age;
+        document.getElementById('p_bplace').innerText = bplace;
+
+        document.getElementById('p_address').innerText = `${house} ${street}, Brgy. ${brgy}, ${city}, ${prov} ${zip}`;
+        document.getElementById('p_father').innerText = f_full;
+        document.getElementById('p_mother').innerText = m_full;
+        document.getElementById('p_guardian').innerText = legal_g;
+
+        document.getElementById('p_track').innerText = track;
+        document.getElementById('p_strand').innerText = strand;
+        document.getElementById('p_date').innerText = new Date().toLocaleDateString();
+
+        const element = document.getElementById('registration-form-pdf');
+        element.style.display = 'block';
+
+        const opt = {
+            margin: 0.5,
+            filename: 'SMSHS_Registration_' + lname + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            element.style.display = 'none';
+        });
+    }
+</script>
+</body>
+</html>

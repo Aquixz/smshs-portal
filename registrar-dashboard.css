@@ -1,0 +1,134 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to bottom right, #0f1d47, #12306b);
+    color: white;
+  }
+  
+  /* TOP BAR */
+  .top-bar {
+    background: #0284c7;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .top-bar .left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+  }
+  
+  .top-bar img {
+    width: 38px;
+  }
+  
+  .logout {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  /* MAIN */
+  .container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 30px;
+  }
+  
+  h2 {
+    margin-bottom: 25px;
+  }
+  
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+  }
+  
+  .card {
+    background: #111827;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 15px 30px rgba(0,0,0,.5);
+  }
+  
+  .card h3 {
+    font-size: 14px;
+    color: #93c5fd;
+    margin-bottom: 10px;
+  }
+  
+  .card span {
+    font-size: 28px;
+    font-weight: 800;
+  }
+  
+  .card.pending span { color: #facc15; }
+  .card.approved span { color: #22c55e; }
+  .card.rejected span { color: #ef4444; }
+  
+  /* ACTIONS */
+  .actions {
+    margin-top: 40px;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .actions button {
+    padding: 12px 26px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+  }
+  
+  .actions .secondary {
+    background: #374151;
+  }
+  
+  .actions button:hover {
+    opacity: 0.9;
+  }
+  .actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+/* PRIMARY BUTTON (View Applications) */
+.primary-btn {
+    background: #2563eb;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s ease;
+}
+
+.primary-btn:hover {
+    background: #1e40af;
+}
+
+/* SECONDARY BUTTON */
+.actions .secondary {
+    background: #6b7280;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.actions .secondary:hover {
+    background: #4b5563;
+}
+  
